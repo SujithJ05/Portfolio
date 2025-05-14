@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Creative Portfolio</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#6366f1", secondary: "#8b5cf6" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <style>
+      :where([class^="ri-"])::before {
+        content: "\f3c2"; /* Default icon, can be overridden by specific ri- classes */
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      .perspective-container {
+        perspective: 1000px;
+        overflow: hidden;
+      }
+      .scroll-reveal {
+        opacity: 0;
+        transform: translateY(50px) rotateX(10deg);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .scroll-reveal.active {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+      }
+      .tilt-card {
+        transform-style: preserve-3d;
+        transition: transform 0.3s ease;
+      }
+      .tilt-card:hover {
+        transform: rotateX(5deg) rotateY(5deg);
+      }
+      .float-on-hover {
+        transition: transform 0.3s ease;
+      }
+      .float-on-hover:hover {
+        transform: translateY(-10px) translateZ(20px);
+      }
+      .rotate-on-scroll {
+        transition: transform 0.5s ease;
+      }
+      body {
+        overflow-x: hidden;
+        background-color: #fcfcfd;
+      }
+      .typewriter {
+        overflow: hidden;
+        border-right: 0.15em solid #6366f1;
+        white-space: nowrap;
+        margin: 0 auto;
+        animation: typing 3.5s steps(40, end),
+          blink-caret 0.75s step-end infinite;
+      }
+      @keyframes typing {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+      @keyframes blink-caret {
+        from,
+        to {
+          border-color: transparent;
+        }
+        50% {
+          border-color: #6366f1;
+        }
+      }
+      .scroll-indicator {
+        animation: bounce 2s infinite;
+      }
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-20px);
+        }
+        60% {
+          transform: translateY(-10px);
+        }
+      }
+      .skill-wheel {
+        position: relative;
+        width: 400px;
+        height: 400px;
+      }
+      .skill-segment {
+        position: absolute;
+        transform-origin: center;
+        transition: all 0.3s ease;
+      }
+      .skill-segment:hover {
+        transform: scale(1.1);
+      }
+      .project-card {
+        transition: all 0.3s ease;
+      }
+      .project-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+      .timeline-item {
+        position: relative;
+      }
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        width: 2px;
+        background-color: #e5e7eb;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        margin-left: -1px;
+      }
+      .timeline-content {
+        position: relative;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        width: 45%;
+      }
+      .timeline-content.left {
+        left: 0;
+      }
+      .timeline-content.right {
+        left: 55%;
+      }
+      .timeline-dot {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-color: #6366f1;
+        border-radius: 50%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+      }
+      .timeline-dot::before {
+        content: "";
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        background-color: rgba(99, 102, 241, 0.2);
+        border-radius: 50%;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .contact-form {
+        perspective: 1000px;
+        transform-style: preserve-3d;
+      }
+      .contact-form form {
+        transition: transform 0.5s ease;
+      }
+      .contact-form:hover form {
+        transform: rotateY(5deg) rotateX(5deg);
+      }
+      .social-icon {
+        transition: all 0.3s ease;
+      }
+      .social-icon:hover {
+        transform: translateY(-5px) scale(1.1);
+      }
+      input,
+      textarea {
+        border: none;
+        outline: none;
+        background-color: #f3f4f6;
+        padding: 1rem;
+        border-radius: 8px;
+        width: 100%;
+        transition: all 0.3s ease;
+      }
+      input:focus,
+      textarea:focus {
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+        background-color: white;
+      }
+      .custom-checkbox {
+        position: relative;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+      }
+      .custom-checkbox input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        background-color: #f3f4f6;
+        border-radius: 4px;
+      }
+      .custom-checkbox input:checked ~ .checkmark {
+        background-color: #6366f1;
+      }
+      .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+      }
+      .custom-checkbox input:checked ~ .checkmark:after {
+        display: block;
+      }
+      .custom-checkbox .checkmark:after {
+        left: 7px;
+        top: 3px;
+        width: 6px;
+        height: 12px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+      .custom-switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+      }
+      .custom-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #e5e7eb;
+        transition: 0.4s;
+        border-radius: 34px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+      input:checked + .slider {
+        background-color: #6366f1;
+      }
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
+      .custom-range {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 6px;
+        border-radius: 5px;
+        background: #e5e7eb;
+        outline: none;
+      }
+      .custom-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #6366f1;
+        cursor: pointer;
+      }
+      .custom-range::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #6366f1;
+        cursor: pointer;
+        border: none;
+      }
+      .floating-element {
+        animation: float 6s ease-in-out infinite;
+      }
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+      .progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background-color: #6366f1;
+        z-index: 1000;
+        transition: width 0.3s ease;
+      }
+      .nav-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #e5e7eb;
+        transition: all 0.3s ease;
+      }
+      .nav-indicator.active {
+        background-color: #6366f1;
+        transform: scale(1.5);
+      }
+      .geometric-shape {
+        position: absolute;
+        opacity: 0.1;
+        z-index: -1;
+      }
+      .shape-1 {
+        top: 10%;
+        left: 5%;
+        width: 300px;
+        height: 300px;
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        background-color: #6366f1;
+        animation: morph 15s linear infinite alternate;
+      }
+      .shape-2 {
+        bottom: 10%;
+        right: 5%;
+        width: 250px;
+        height: 250px;
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        background-color: #8b5cf6;
+        animation: morph 15s linear infinite alternate-reverse;
+      }
+      @keyframes morph {
+        0% {
+          border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        }
+        25% {
+          border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%;
+        }
+        50% {
+          border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%;
+        }
+        75% {
+          border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%;
+        }
+        100% {
+          border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        }
+      }
+      .section-gradient {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(243, 244, 246, 1) 100%
+        );
+      }
+      .project-filter-btn {
+        transition: all 0.3s ease;
+      }
+      .project-filter-btn.active {
+        background-color: #6366f1;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress-bar" id="progressBar"></div>
+    <!-- Navigation -->
+    <nav
+      class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md shadow-sm"
+    >
+      <div
+        class="container mx-auto px-6 py-4 flex justify-between items-center"
+      >
+        <a href="#home" class="scroll-link block">
+          <img
+            src="assets/logo.png"
+            alt="Sujith Chandra SC Logo"
+            class="h-10 w-10 rounded-full object-cover"
+          />
+        </a>
+        <div class="hidden md:flex items-center space-x-8">
+          <a
+            href="#home"
+            class="text-gray-800 hover:text-primary transition-colors scroll-link"
+            >Home</a
+          >
+          <a
+            href="#skills"
+            class="text-gray-800 hover:text-primary transition-colors scroll-link"
+            >Skills</a
+          >
+          <a
+            href="#projects"
+            class="text-gray-800 hover:text-primary transition-colors scroll-link"
+            >Projects</a
+          >
+          <a
+            href="#contact"
+            class="text-gray-800 hover:text-primary transition-colors scroll-link"
+            >Contact</a
+          >
+        </div>
+        <div class="md:hidden w-10 h-10 flex items-center justify-center">
+          <i class="ri-menu-line ri-2x text-gray-800"></i>
+        </div>
+        <div class="hidden md:flex space-x-2">
+          <div class="nav-indicator" data-section="home"></div>
+          <div class="nav-indicator" data-section="skills"></div>
+          <div class="nav-indicator" data-section="projects"></div>
+          <div class="nav-indicator" data-section="contact"></div>
+        </div>
+      </div>
+    </nav>
+    <!-- Hero Section -->
+    <section
+      id="home"
+      class="min-h-screen flex items-center justify-center relative overflow-hidden"
+      style="
+        background-image: url('https://readdy.ai/api/search-image?query=abstract%20digital%20creative%20background%20with%20geometric%20shapes%2C%20purple%20and%20blue%20gradient%2C%20modern%20minimalist%20design%20style%2C%20clean%20professional%20look%2C%20subtle%20patterns%2C%20tech%20inspired&width=1920&height=1080&seq=1&orientation=landscape');
+        background-size: cover;
+        background-position: center;
+      "
+    >
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-white/90 to-white/50"
+      ></div>
+      <div class="container mx-auto px-6 py-24 relative z-10">
+        <div class="max-w-3xl">
+          <h1 class="text-5xl md:text-7xl font-bold mb-4 text-gray-900">
+            <span class="typewriter inline-block">Sujith Chandra</span>
+          </h1>
+          <h2 class="text-2xl md:text-3xl font-medium mb-8 text-gray-700">
+            Creative Developer & Digital Artist
+          </h2>
+          <p class="text-lg text-gray-600 mb-12 max-w-2xl">
+            Transforming ideas into immersive digital experiences through code
+            and design. Specializing in interactive web development, 3D
+            visualization, and creative coding.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a
+              href="#projects"
+              class="px-8 py-3 bg-primary text-white font-medium !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap"
+              >View My Work</a
+            >
+            <a
+              href="#contact"
+              class="px-8 py-3 border-2 border-primary text-primary font-medium !rounded-button hover:bg-primary/10 transition-colors whitespace-nowrap"
+              >Get In Touch</a
+            >
+          </div>
+        </div>
+      </div>
+      <div
+        class="absolute bottom-10 left-1/2 transform -translate-x-1/2 scroll-indicator"
+      >
+        <div
+          class="w-8 h-12 flex items-center justify-center border-2 border-primary !rounded-full"
+        >
+          <div class="w-2 h-2 bg-primary rounded-full"></div>
+        </div>
+      </div>
+    </section>
+    <!-- Skills Section -->
+    <section id="skills" class="py-24 section-gradient relative">
+      <div class="geometric-shape shape-1"></div>
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold mb-4 text-gray-900">My Skills</h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            A comprehensive overview of my technical expertise and creative
+            capabilities.
+          </p>
+        </div>
+        <div
+          class="flex flex-col lg:flex-row items-center justify-center gap-12"
+        >
+          <div class="skill-wheel perspective-container" id="skillWheel">
+            <!-- Skill wheel will be generated by JS -->
+          </div>
+          <div class="max-w-xl">
+            <div class="mb-8">
+              <h3 class="text-2xl font-bold mb-4 text-gray-900">
+                Technical Proficiency
+              </h3>
+              <div class="space-y-6">
+                <div>
+                  <div class="flex justify-between mb-2">
+                    <span class="font-medium text-gray-700">HTML & CSS</span>
+                    <span class="text-primary font-medium">75%</span>
+                  </div>
+                  <div class="h-2 bg-gray-200 rounded-full">
+                    <div
+                      class="h-2 bg-primary rounded-full"
+                      style="width: 75%"
+                    ></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between mb-2">
+                    <span class="font-medium text-gray-700"
+                      >JavaScript Basics</span
+                    >
+                    <span class="text-primary font-medium">65%</span>
+                  </div>
+                  <div class="h-2 bg-gray-200 rounded-full">
+                    <div
+                      class="h-2 bg-primary rounded-full"
+                      style="width: 65%"
+                    ></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between mb-2">
+                    <span class="font-medium text-gray-700"
+                      >Responsive Design</span
+                    >
+                    <span class="text-primary font-medium">70%</span>
+                  </div>
+                  <div class="h-2 bg-gray-200 rounded-full">
+                    <div
+                      class="h-2 bg-primary rounded-full"
+                      style="width: 70%"
+                    ></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between mb-2">
+                    <span class="font-medium text-gray-700"
+                      >Prompt Engineering</span
+                    >
+                    <span class="text-primary font-medium">90%</span>
+                  </div>
+                  <div class="h-2 bg-gray-200 rounded-full">
+                    <div
+                      class="h-2 bg-primary rounded-full"
+                      style="width: 90%"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold mb-4 text-gray-900">
+                Tools & Technologies
+              </h3>
+              <div class="flex flex-wrap gap-3">
+                <span
+                  class="px-4 py-2 bg-white shadow-sm rounded-full text-gray-700"
+                  >HTML5</span
+                >
+                <span
+                  class="px-4 py-2 bg-white shadow-sm rounded-full text-gray-700"
+                  >CSS3</span
+                >
+                <span
+                  class="px-4 py-2 bg-white shadow-sm rounded-full text-gray-700"
+                  >JavaScript</span
+                >
+                <!-- <span
+                  class="px-4 py-2 bg-white shadow-sm rounded-full text-gray-700"
+                  >TailwindCSS</span
+                > -->
+                <!-- <span
+                  class="px-4 py-2 bg-white shadow-sm rounded-full text-gray-700"
+                  >Bootstrap</span
+                > -->
+                <!-- <span
+                  class="px-4 py-2 bg-white shadow-sm rounded-full text-gray-700"
+                  >Git Basics</span
+                > -->
+                <span
+                  class="px-4 py-2 bg-white shadow-sm rounded-full text-gray-700"
+                  >VS Code</span
+                >
+                <span
+                  class="px-4 py-2 bg-white shadow-sm rounded-full text-gray-700"
+                  >Basic Node.js</span
+                >
+                <span
+                  class="px-4 py-2 bg-white shadow-sm rounded-full text gray-700"
+                  >Prompt Engineering</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Projects Section -->
+    <section id="projects" class="py-24 bg-white relative">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold mb-4 text-gray-900">
+            Featured Projects
+          </h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Exciting new projects are on the way. Stay tuned for updates!
+          </p>
+        </div>
+
+        <div class="text-center py-10 md:py-16">
+          <div
+            class="inline-block p-8 sm:p-12 bg-gray-50 rounded-xl shadow-lg border border-gray-200 scroll-reveal"
+          >
+            <div class="flex justify-center mb-6">
+              <svg
+                class="w-16 h-16 text-primary animate-pulse"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">
+              Coming Soon!
+            </h3>
+            <p class="text-lg text-gray-600 max-w-md mx-auto">
+              I'm passionately working on new and exciting projects. Please
+              check back later to see my latest work.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Experience Timeline Section -->
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-white relative">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold mb-4 text-gray-900">Get In Touch</h2>
+        </div>
+        <div class="max-w-3xl mx-auto text-center">
+          <div class="mb-12">
+            <p class="text-xl text-gray-600 leading-relaxed">
+              Let's create something extraordinary together! Whether you have a
+              groundbreaking project in mind or just want to say hello, I'm
+              always excited to connect with fellow creators and innovators.
+            </p>
+          </div>
+        </div>
+
+        <div class="max-w-4xl mx-auto mb-12">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- LinkedIn Block -->
+            <div
+              class="p-8 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow float-on-hover text-center"
+            >
+              <div
+                class="w-20 h-20 mx-auto mb-6 flex items-center justify-center bg-primary/10 rounded-full"
+              >
+                <i class="ri-linkedin-fill text-4xl text-primary"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                Let's Connect on LinkedIn
+              </h3>
+              <p class="text-gray-600 mb-6">
+                I'm always open to connecting with fellow professionals,
+                discussing opportunities, and sharing insights about creative
+                development.
+              </p>
+              <a
+                href="https://www.linkedin.com/in/sujith-chandra-j-955501338"
+                target="_blank"
+                class="inline-flex items-center justify-center px-8 py-3 bg-primary text-white font-medium !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap"
+              >
+                <i class="ri-linkedin-fill mr-2"></i> Connect with Me
+              </a>
+            </div>
+
+            <!-- GitHub Block -->
+            <div
+              class="p-8 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow float-on-hover text-center"
+            >
+              <div
+                class="w-20 h-20 mx-auto mb-6 flex items-center justify-center bg-gray-800/10 rounded-full"
+              >
+                <i class="ri-github-fill text-4xl text-gray-900"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                Explore My Code on GitHub
+              </h3>
+              <p class="text-gray-600 mb-6">
+                Dive into my repositories, check out my projects, and see my
+                coding style. Contributions and collaborations are welcome!
+              </p>
+              <a
+                href="https://github.com/SujithJ05"
+                target="_blank"
+                class="inline-flex items-center justify-center px-8 py-3 bg-gray-800 text-white font-medium !rounded-button hover:bg-gray-700 transition-colors whitespace-nowrap"
+              >
+                <i class="ri-github-fill mr-2"></i> View My GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="max-w-2xl mx-auto">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div
+              class="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
+            >
+              <div
+                class="w-12 h-12 mb-4 flex items-center justify-center bg-primary/10 rounded-full"
+              >
+                <i class="ri-time-line text-xl text-primary"></i>
+              </div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-2">
+                Quick Response
+              </h4>
+              <p class="text-gray-600">
+                I typically respond within 24-48 hours
+              </p>
+            </div>
+            <div
+              class="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
+            >
+              <div
+                class="w-12 h-12 mb-4 flex items-center justify-center bg-primary/10 rounded-full"
+              >
+                <i class="ri-discuss-line text-xl text-primary"></i>
+              </div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-2">
+                Open to Discussion
+              </h4>
+              <p class="text-gray-600">
+                Available for projects and collaborations
+              </p>
+            </div>
+            <div
+              class="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
+            >
+              <div
+                class="w-12 h-12 mb-4 flex items-center justify-center bg-primary/10 rounded-full"
+              >
+                <i class="ri-global-line text-xl text-primary"></i>
+              </div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-2">
+                Remote Friendly
+              </h4>
+              <p class="text-gray-600">Working with clients worldwide</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+      <div class="container mx-auto px-6">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center mb-8"
+        >
+          <a href="#home" class="scroll-link block mb-6 md:mb-0">
+            <img
+              src="assets/logo.png"
+              alt="Sujith Chandra SC Logo"
+              class="h-12 w-12 rounded-full object-cover"
+            />
+          </a>
+          <div class="flex flex-wrap justify-center gap-6">
+            <a
+              href="#home"
+              class="text-gray-300 hover:text-white transition-colors"
+              >Home</a
+            >
+            <a
+              href="#skills"
+              class="text-gray-300 hover:text-white transition-colors"
+              >Skills</a
+            >
+            <a
+              href="#projects"
+              class="text-gray-300 hover:text-white transition-colors"
+              >Projects</a
+            >
+            <a
+              href="#contact"
+              class="text-gray-300 hover:text-white transition-colors"
+              >Contact</a
+            >
+          </div>
+        </div>
+        <hr class="border-gray-800 mb-8" />
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-400 mb-4 md:mb-0">
+            © 2025 Sujith Chandra. All rights reserved.
+          </p>
+          <div class="flex space-x-6">
+            <a
+              href="https://github.com/SujithJ05"
+              target="_blank"
+              class="text-gray-400 hover:text-white transition-colors"
+            >
+              <i class="ri-github-line"></i>
+            </a>
+            <a
+              href="#"
+              class="text-gray-400 hover:text-white transition-colors"
+            >
+              <i class="ri-behance-line"></i>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/sujith-chandra-j-955501338"
+              target="_blank"
+              class="text-gray-400 hover:text-white transition-colors"
+            >
+              <i class="ri-linkedin-line"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const scrollRevealElements =
+          document.querySelectorAll(".scroll-reveal");
+        const rotateElements = document.querySelectorAll(".rotate-on-scroll");
+        const observerOptions = {
+          threshold: 0.2, // Trigger when 20% of the element is visible
+        };
+        const scrollObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("active");
+            }
+          });
+        }, observerOptions);
+        scrollRevealElements.forEach((element) => {
+          scrollObserver.observe(element);
+        });
+        window.addEventListener("scroll", () => {
+          const scrolled = window.pageYOffset;
+          rotateElements.forEach((element) => {
+            const rate = scrolled * 0.1; // Adjust rotation speed
+            element.style.transform = `rotateY(${rate}deg)`;
+          });
+        });
+        // Smooth scrolling
+        const scrollLinks = document.querySelectorAll(".scroll-link");
+        scrollLinks.forEach((link) => {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute("href");
+            const targetSection = document.querySelector(targetId);
+            targetSection.scrollIntoView({ behavior: "smooth" });
+          });
+        });
+        // Progress bar
+        const progressBar = document.getElementById("progressBar");
+        window.addEventListener("scroll", function () {
+          const winScroll =
+            document.body.scrollTop || document.documentElement.scrollTop;
+          const height =
+            document.documentElement.scrollHeight -
+            document.documentElement.clientHeight;
+          const scrolled = (winScroll / height) * 100;
+          progressBar.style.width = scrolled + "%";
+        });
+        // Navigation indicators
+        const sections = document.querySelectorAll("section");
+        const navIndicators = document.querySelectorAll(".nav-indicator");
+        window.addEventListener("scroll", function () {
+          let current = "";
+          sections.forEach((section) => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (pageYOffset >= sectionTop - sectionHeight / 3) {
+              current = section.getAttribute("id");
+            }
+          });
+          navIndicators.forEach((indicator) => {
+            indicator.classList.remove("active");
+            if (indicator.getAttribute("data-section") === current) {
+              indicator.classList.add("active");
+            }
+          });
+        });
+        // Project filter buttons - This can be removed if no projects are displayed
+        // const filterButtons = document.querySelectorAll(".project-filter-btn");
+        // filterButtons.forEach((button) => {
+        //   button.addEventListener("click", function () {
+        //     filterButtons.forEach((btn) => btn.classList.remove("active"));
+        //     this.classList.add("active");
+        //     // Here you would normally filter the projects
+        //   });
+        // });
+      });
+      document.addEventListener("DOMContentLoaded", function () {
+        // Skill wheel chart
+        const skillWheelContainer = document.getElementById("skillWheel");
+        if (skillWheelContainer) {
+          const skillWheel = echarts.init(skillWheelContainer);
+          const option = {
+            animation: false, // Turn off default animation if using scroll reveal
+            tooltip: {
+              trigger: "item",
+              backgroundColor: "rgba(255, 255, 255, 0.9)",
+              borderColor: "#f1f1f1",
+              textStyle: {
+                color: "#1f2937",
+              },
+            },
+            series: [
+              {
+                name: "Skills",
+                type: "pie",
+                radius: ["40%", "70%"], // Inner and outer radius
+                center: ["50%", "50%"],
+                roseType: "area", // 'radius' or 'area'
+                itemStyle: {
+                  borderRadius: 8,
+                },
+                label: {
+                  show: true,
+                  position: "outside", // 'inside', 'outside', 'center'
+                  formatter: "{b}: {c}%",
+                  color: "#1f2937",
+                },
+                emphasis: {
+                  itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: "rgba(0, 0, 0, 0.2)",
+                  },
+                },
+                data: [
+                  {
+                    value: 75,
+                    name: "HTML & CSS",
+                    itemStyle: { color: "rgba(87, 181, 231, 1)" }, // Example color
+                  },
+                  {
+                    value: 65,
+                    name: "JavaScript",
+                    itemStyle: { color: "rgba(141, 211, 199, 1)" },
+                  },
+                  {
+                    value: 70,
+                    name: "Responsive Design",
+                    itemStyle: { color: "rgba(251, 191, 114, 1)" },
+                  },
+                  {
+                    value: 90,
+                    name: "Prompt Engineering",
+                    itemStyle: { color: "rgba(252, 141, 98, 1)" },
+                  },
+                ],
+              },
+            ],
+          };
+          skillWheel.setOption(option);
+          window.addEventListener("resize", function () {
+            skillWheel.resize();
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
