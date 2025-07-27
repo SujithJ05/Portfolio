@@ -949,15 +949,6 @@
             }
           });
         });
-        // Project filter buttons - This can be removed if no projects are displayed
-        // const filterButtons = document.querySelectorAll(".project-filter-btn");
-        // filterButtons.forEach((button) => {
-        //   button.addEventListener("click", function () {
-        //     filterButtons.forEach((btn) => btn.classList.remove("active"));
-        //     this.classList.add("active");
-        //     // Here you would normally filter the projects
-        //   });
-        // });
       });
       document.addEventListener("DOMContentLoaded", function () {
         // Skill wheel chart
@@ -978,15 +969,15 @@
               {
                 name: "Skills",
                 type: "pie",
-                radius: ["40%", "70%"], // Inner and outer radius
+                radius: ["40%", "70%"],
                 center: ["50%", "50%"],
-                roseType: "area", // 'radius' or 'area'
+                roseType: "area",
                 itemStyle: {
                   borderRadius: 8,
                 },
                 label: {
                   show: true,
-                  position: "outside", // 'inside', 'outside', 'center'
+                  position: "outside",
                   formatter: "{b}: {c}%",
                   color: "#1f2937",
                 },
@@ -1001,7 +992,7 @@
                   {
                     value: 75,
                     name: "HTML & CSS",
-                    itemStyle: { color: "rgba(87, 181, 231, 1)" }, // Example color
+                    itemStyle: { color: "rgba(87, 181, 231, 1)" },
                   },
                   {
                     value: 65,
